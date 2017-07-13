@@ -6,7 +6,7 @@
 @model Collection<ApiDescription>
 
 @{
-    ViewBag.Title = "ASP.NET Web API Help Page";
+    ViewBag.Title = "About API Service";
 
     // Group APIs by controller
     ILookup<HttpControllerDescriptor, ApiDescription> apiGroups = Model.ToLookup(api => api.ActionDescriptor.ControllerDescriptor);
@@ -21,6 +21,13 @@
     </div>
 </header>
 <div id="body" class="help-page">
+    <section class="featured">
+        <div class="content-wrapper">
+            <h2>Testing Function</h2>
+            <p><a href="~/WebFormsforTest/ConnecttoMySQLDEMO.aspx">connecttoMySQLDemo</a></p>
+            <p><a href="~/WebFormsforTest/SendEmail.aspx">send email</a></p>
+        </div>
+    </section>
     <section class="featured">
         <div class="content-wrapper">
             <h2>Introduction</h2>

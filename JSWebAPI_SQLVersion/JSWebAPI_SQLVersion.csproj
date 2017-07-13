@@ -225,11 +225,11 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="ConnecttoMySQLDEMO.aspx.cs">
+    <Compile Include="WebFormsforTest\ConnecttoMySQLDEMO.aspx.cs">
       <DependentUpon>ConnecttoMySQLDEMO.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ConnecttoMySQLDEMO.aspx.designer.cs">
+    <Compile Include="WebFormsforTest\ConnecttoMySQLDEMO.aspx.designer.cs">
       <DependentUpon>ConnecttoMySQLDEMO.aspx</DependentUpon>
     </Compile>
     <Compile Include="Controllers\AccountController.cs" />
@@ -252,11 +252,19 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
+    <Compile Include="WebFormsforTest\SendEmail.aspx.cs">
+      <DependentUpon>SendEmail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebFormsforTest\SendEmail.aspx.designer.cs">
+      <DependentUpon>SendEmail.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
-    <Content Include="ConnecttoMySQLDEMO.aspx" />
+    <Content Include="Content\jshen.jpg" />
+    <Content Include="WebFormsforTest\ConnecttoMySQLDEMO.aspx" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
@@ -296,6 +304,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="WebFormsforTest\SendEmail.aspx" />
     <Content Include="SQLforMySQL.sql" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -312,6 +321,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\Index - Copy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
