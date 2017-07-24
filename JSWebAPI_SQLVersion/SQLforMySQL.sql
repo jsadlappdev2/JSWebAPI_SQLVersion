@@ -7,17 +7,6 @@
   -- username: root , password: root
 
 --3. craete tables:
-
---test table
-create table test
-(name varchar(50),
- id int(11),
- sex varchar(2),
- address varchar(50));
-
- insert into test values('test',2,'F','test222');
- insert into test values('jerry',2,'M','test222');
-
  --tables for todolist
  
 CREATE TABLE TodoItem(
@@ -31,3 +20,48 @@ insert into TodoItem(Description,DueDate,isDone)  values('test1','2016-08-09',0)
 insert into TodoItem(Description,DueDate,isDone)  values('test2','2016-09-09',0)
 
 select * from TodoItem
+
+
+--user table
+CREATE TABLE users(
+   userid INT AUTO_INCREMENT PRIMARY KEY,
+   username VARCHAR(100),
+   email varchar(100),
+   password varchar(100),
+   create_date datetime,
+   unvalid_date datetime,
+   valid_flag TINYINT(1)
+);
+
+select * from users
+
+select concat( concat(concat('Hi ',' ', username),'! Your password is: ',password),'. Please try again!',' (Admin)') from users
+
+--new todoitem with userid
+ 
+CREATE TABLE NewTodoItem(
+   id INT AUTO_INCREMENT PRIMARY KEY,
+   userid int,
+   Description VARCHAR(500),
+   DueDate VARCHAR(255),
+    isDone TINYINT(1)
+);
+
+ select * from NewTodoItem
+ 
+ --table for send email
+ 
+ drop table email_send_history
+ create table email_send_history
+ (
+ id INT AUTO_INCREMENT PRIMARY KEY,
+ userid int,
+ email_to varchar(100),
+ content varchar(500),
+ send_date datetime,
+ send_from varchar(100)
+ 
+ )
+ 
+ select * from email_send_history
+ 

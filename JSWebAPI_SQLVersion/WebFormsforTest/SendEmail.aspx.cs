@@ -19,7 +19,7 @@ namespace JSWebAPI_SQLVersion
 
         protected void Button1_Click(object sender, EventArgs e)
         {
-            MailMessage mm = new MailMessage("jerryshenhz@gmail.com","shenjr81@gmail.com","test from asp.net","test");
+            MailMessage mm = new MailMessage("jsappserver@gmail.com", "shenjr81@gmail.com", "test from asp.net from jsappserver@gmail.com", "test");
             mm.IsBodyHtml = false;
 
             SmtpClient smtp = new SmtpClient();
@@ -28,7 +28,7 @@ namespace JSWebAPI_SQLVersion
 
             smtp.EnableSsl = true;
 
-            NetworkCredential NetworkCred = new NetworkCredential("jerryshenhz@gmail.com","frank1106");
+            NetworkCredential NetworkCred = new NetworkCredential("jsappserver@gmail.com", "sjerry81");
 
             smtp.UseDefaultCredentials = true;
 
