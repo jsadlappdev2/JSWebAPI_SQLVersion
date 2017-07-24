@@ -77,12 +77,93 @@ namespace JSWebAPI_SQLVersion.Controllers
         }
 
 
+        //-----------------------------------QuerybyusernameGetdetails-----------------------------------------------------------------------------
+        [HttpGet]
+        [ActionName("QueryByUsername")]
+        public List<users> QueryByUsername(string username)
+        {
+
+
+
+            string conString = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
+            var con = new MySqlConnection(conString);
+
+            MySqlCommand cmd = new MySqlCommand(" select *  from users where username ='"+ username +"' and valid_flag=1 ", con);
+            cmd.CommandType = CommandType.Text;
+            // Create a DataAdapter to run the command and fill the DataTable
+            MySqlDataAdapter da = new MySqlDataAdapter();
+            da.SelectCommand = cmd;
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            List<users> alluser = new List<users>();
+            foreach (DataRow row in dt.Rows)
+            {
+                alluser.Add(new users()
+                {
+                    userid = (int)row["userid"],
+                    username = row["username"].ToString(),
+                    email = row["email"].ToString(),
+                    password = row["password"].ToString(),
+               //   create_date = (DateTime)row["create_date"],
+               //  unvalid_date= (DateTime)row["unvalid_date"],
+                    valid_flag = (bool)row["valid_flag"]
+                });
+            }
+
+            if (alluser == null)
+            {
+                return null;
+
+            }
+            else
+            {
+                return alluser;
+            }
+
+
+        }
+
+        //-----------------------------------Querybyusernametocheck-----------------------------------------------------------------------------
+        [HttpGet]
+        [ActionName("QueryByUsernameSimple")]
+        public int  QueryByUsernameSimple(string username)
+        {
+            try
+            {
+                
+                string sql = "Select *  from users where username='" + username + "' and valid_flag='1'  ";
+                string connStr = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
+                MySqlConnection connsql = new MySqlConnection(connStr);
+                if (connsql.State.ToString() == "Closed") connsql.Open();
+                MySqlCommand Cmd = new MySqlCommand(sql, connsql);
+                DataTable dt = new DataTable();
+                MySqlDataAdapter sda = new MySqlDataAdapter();
+                sda.SelectCommand = Cmd;
+                sda.Fill(dt);
+                if (dt.Rows.Count == 0)
+                {
+                    return 10;
+                }
+                else
+                {
+                    return 11;
+                }
+            }
+            catch (Exception)
+            {
+                return 12;
+
+            }
+        }
+
+
+
 
         //------------------------------------function to check records exist or not----------------------------------------------
         public int checkexistbyusername(string username)
         {
 
-            string sql = "Select *  from users where username='" + username + "' ";
+            string sql = "Select *  from users where username='" + username + "' and valid_flag=1  ";
             string connStr = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
             MySqlConnection connsql = new MySqlConnection(connStr);
             if (connsql.State.ToString() == "Closed") connsql.Open();
@@ -98,7 +179,7 @@ namespace JSWebAPI_SQLVersion.Controllers
         public int checkexistbyuserid(int id)
         {
 
-            string sql = "Select *  from users where userid=" + id + " ";
+            string sql = "Select *  from users where userid=" + id + "  and valid_flag=1 ";
             string connStr = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
             MySqlConnection connsql = new MySqlConnection(connStr);
             if (connsql.State.ToString() == "Closed") connsql.Open();
