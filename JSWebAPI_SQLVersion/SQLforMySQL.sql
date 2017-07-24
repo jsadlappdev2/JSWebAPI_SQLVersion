@@ -33,7 +33,7 @@ CREATE TABLE users(
    valid_flag TINYINT(1)
 );
 
-select * from users
+select * from users where valid_flag=1 and username ='jerryshen'
 
 select concat( concat(concat('Hi ',' ', username),'! Your password is: ',password),'. Please try again!',' (Admin)') from users
 
