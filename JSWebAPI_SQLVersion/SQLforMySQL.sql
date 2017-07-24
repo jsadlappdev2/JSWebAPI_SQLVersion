@@ -5,6 +5,8 @@
 
 --2. create MySQL databse and named as apidb
   -- username: root , password: root
+  
+  -- username: root password: frank110*****  -->home pc
 
 --3. craete tables:
  --tables for todolist
