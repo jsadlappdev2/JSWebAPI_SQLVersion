@@ -38,17 +38,22 @@
             <p><a> 6: delete not found userid.</a></p>
             <p><a> -- Update API--</a></p>
             <p><a> 7: update successfully</a></p>
-            <p><a> 8: delete failed.</a></p>
-            <p><a> 9: delete not found userid.</a></p>
-            <p><a> -- Query to check exist or not API--</a></p>
-            <p><a>Example: QueryByUsernameSimple</a></p>
-            <p><a> 10: Not exist.</a></p>
-            <p><a> 11: Exist</a></p>
-            <p><a> 12: Query Error</a></p>
+            <p><a> 8: update failed.</a></p>
+            <p><a> 9: update not found userid.</a></p>
+            <p></p>
+            <p><a> -- LoginUserValidation--</a></p>
+            <p><a>Pamaraters: (username or email) and password</a></p>
+            <p><a>http://localhost:60761/api/users/LoginUserValidation?usernameoremail=jerryshenhz@gmail.com&password=123456</a></p>
+            <p><a>http://localhost:60761/api/users/LoginUserValidation?usernameoremail=jerryshen&password=123456</a></p>
+            <p><a> 1: Not right user</a></p>
+            <p><a> 2: right user</a></p>
+            <p><a> 3: Validation with error</a></p>
             <p><a> -- Query details API--</a></p>
             <p><a> different codes</a></p>
             <p></p>
-            <h2>SendPassword API status</h2>       
+            <p><a> -- SendPassword API status--</a></p>       
+            <p><a>http://localhost:60761/api/email/SendPassword</a></p>
+            <p><a>BODY: {'userid':2,'email_to':'shenjr81@gmail.com',}</a></p>
             <p><a> 2: get password and send email success</a></p>
             <p><a> 3: get password and send email success but insert history failed.</a></p>
             <p><a> 4: Get password success but send email failed!</a></p>

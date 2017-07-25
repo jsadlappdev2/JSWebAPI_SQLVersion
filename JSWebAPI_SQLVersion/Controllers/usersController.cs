@@ -158,6 +158,44 @@ namespace JSWebAPI_SQLVersion.Controllers
 
 
 
+        //-----------------------------------LoginUserValidation-----------------------------------------------------------------------------
+        [HttpGet]
+        [ActionName("LoginUserValidation")]
+        public int LoginUserValidation(string usernameoremail, string password)
+        {
+            try
+            {
+
+                string sql = "Select *  from users where ( username='" + usernameoremail + "' or email ='" + usernameoremail + "' ) and password='" + password + "' and valid_flag='1'  ";
+                string connStr = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
+                MySqlConnection connsql = new MySqlConnection(connStr);
+                if (connsql.State.ToString() == "Closed") connsql.Open();
+                MySqlCommand Cmd = new MySqlCommand(sql, connsql);
+                DataTable dt = new DataTable();
+                MySqlDataAdapter sda = new MySqlDataAdapter();
+                sda.SelectCommand = Cmd;
+                sda.Fill(dt);
+                if (dt.Rows.Count == 0)
+                {
+                    //1: not right user 
+                    return 1;
+                }
+                else
+                {
+                    //2: right user 
+                    return 2;
+                }
+            }
+            catch (Exception)
+            {
+                //3: checking failed with error
+                return 3;
+
+            }
+        }
+
+
+
 
         //------------------------------------function to check records exist or not----------------------------------------------
         public int checkexistbyusername(string username)
