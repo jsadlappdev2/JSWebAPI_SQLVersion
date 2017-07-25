@@ -86,6 +86,77 @@ namespace JSWebAPI_SQLVersion.Controllers
             }
         }
 
+        //API: send password to users jsut check emailto
+        [HttpPost]
+        [ActionName("SendPasswordJustmail")]
+        public int SendPasswordJustmail(string emailto)
+        {
+
+            //check exist or not 
+            int count = 0;
+            count = checkuserexistbyemail(emailto);
+            if (count >= 1)
+            {
+
+                string emailcontent = getpasswordbyemail(emailto);
+
+
+                int sendemail_status = 0;
+                sendemail_status = Sendemail(emailto, "Your Password for DailyLife App (Do not reply)", emailcontent);
+                if (sendemail_status == 20)
+                {
+
+
+                    MySqlConnection myConnection = new MySqlConnection();
+                    myConnection.ConnectionString = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
+
+                    MySqlCommand sqlCmd = new MySqlCommand();
+                    sqlCmd.CommandType = CommandType.Text;
+                    sqlCmd.CommandText = "INSERT INTO email_send_history (userid,email_to,content,send_date,send_from)  select userid,@email_to,'" + emailcontent + "',NOW(),'ADMIN' from users where email=@email_to ";
+                    sqlCmd.Connection = myConnection;
+
+                   
+                    sqlCmd.Parameters.AddWithValue("@email_to", emailto);
+
+
+
+                    try
+                    {
+                        myConnection.Open();
+                        int rowInserted = sqlCmd.ExecuteNonQuery();
+                        //get password and send email success.
+                        return 2;
+                    }
+                    catch
+                    {
+
+                        //get password and send email success but insert history failed.
+                        return 3;
+
+                    }
+                    finally
+                    {
+                        myConnection.Close();
+                    }
+                }
+                else
+                {
+                    //4: Get password success but send email failed!
+                    return 4;
+                }
+
+            }
+            else
+            {
+
+                //5: No email exists!
+                return 5;
+
+
+
+            }
+        }
+
 
 
 
@@ -173,7 +244,7 @@ namespace JSWebAPI_SQLVersion.Controllers
             myConnection.ConnectionString = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
             MySqlCommand sqlCmd = new MySqlCommand();
             sqlCmd.CommandType = CommandType.Text;
-            sqlCmd.CommandText =  "select concat(concat(concat('Hi ', ' ', username), '! Your password is: ', password), '. Please try again!', ' (Admin)') from users  where email = '" + email + "' ";
+            sqlCmd.CommandText =  "select concat(concat(concat('Hi ', ' ', username), '! Your password is: ', password), '. Please try again!', ' Thank you!') from users  where email = '" + email + "' ";
             sqlCmd.Connection = myConnection;
             myConnection.Open();
             reader = sqlCmd.ExecuteReader();
