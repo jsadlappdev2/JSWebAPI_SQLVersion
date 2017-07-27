@@ -223,6 +223,7 @@
     <Compile Include="Controllers\newtodosController.cs" />
     <Compile Include="Controllers\usersController.cs" />
     <Compile Include="Models\email.cs" />
+    <Compile Include="Models\emailaddress.cs" />
     <Compile Include="Models\newtodos.cs" />
     <Compile Include="Models\users.cs" />
     <Compile Include="WebFormsforTest\ConnecttoMySQLDEMO.aspx.cs">

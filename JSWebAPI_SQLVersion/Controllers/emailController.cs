@@ -86,6 +86,75 @@ namespace JSWebAPI_SQLVersion.Controllers
             }
         }
 
+
+        public int SendPasswordJustCheckemail([FromBody] emailaddress myemail)
+        {
+
+            //check exist or not 
+            int count = 0;
+            count = checkuserexistbyemail(myemail.email_to);
+            if (count >= 1)
+            {
+
+                string emailcontent = getpasswordbyemail(myemail.email_to);
+
+
+                int sendemail_status = 0;
+                sendemail_status = Sendemail(myemail.email_to, "Your Password for DailyLife App", emailcontent);
+                if (sendemail_status == 20)
+                {
+
+
+                    MySqlConnection myConnection = new MySqlConnection();
+                    myConnection.ConnectionString = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
+
+                    MySqlCommand sqlCmd = new MySqlCommand();
+                    sqlCmd.CommandType = CommandType.Text;
+                    sqlCmd.CommandText = "INSERT INTO email_send_history (userid,email_to,content,send_date,send_from)  select userid,@email_to,'" + emailcontent + "',NOW(),'ADMIN' from users where email=@email_to ";
+                    sqlCmd.Connection = myConnection;
+
+                   
+                    sqlCmd.Parameters.AddWithValue("@email_to", myemail.email_to);
+
+
+
+                    try
+                    {
+                        myConnection.Open();
+                        int rowInserted = sqlCmd.ExecuteNonQuery();
+                        //get password and send email success.
+                        return 2;
+                    }
+                    catch
+                    {
+
+                        //get password and send email success but insert history failed.
+                        return 3;
+
+                    }
+                    finally
+                    {
+                        myConnection.Close();
+                    }
+                }
+                else
+                {
+                    //4: Get password success but send email failed!
+                    return 4;
+                }
+
+            }
+            else
+            {
+
+                //5: No email exists!
+                return 5;
+
+
+
+            }
+        }
+
         //API: send password to users jsut check emailto
         [HttpPost]
         [ActionName("SendPasswordJustmail")]
