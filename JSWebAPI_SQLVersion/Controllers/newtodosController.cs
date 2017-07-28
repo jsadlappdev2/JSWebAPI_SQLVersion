@@ -148,7 +148,7 @@ namespace JSWebAPI_SQLVersion.Controllers
             string conString = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
             var con = new MySqlConnection(conString);
 
-            MySqlCommand cmd = new MySqlCommand(" select *  from NewTodoItem where username="+username+" order by  isdone,id asc ", con);
+            MySqlCommand cmd = new MySqlCommand(" select *  from NewTodoItem where username='"+username+"' order by  isdone,id asc ", con);
             cmd.CommandType = CommandType.Text;
             // Create a DataAdapter to run the command and fill the DataTable
             MySqlDataAdapter da = new MySqlDataAdapter();

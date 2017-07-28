@@ -69,3 +69,12 @@ CREATE TABLE NewTodoItem(
  
  select * from email_send_history
  
+ 
+ SELECT CHARACTER_SET_NAME, DESCRIPTION
+       FROM INFORMATION_SCHEMA.CHARACTER_SETS
+       WHERE DESCRIPTION LIKE '%Chin%'
+       OR DESCRIPTION LIKE '%Japanese%'
+       OR DESCRIPTION LIKE '%Korean%'
+       ORDER BY CHARACTER_SET_NAME;
+
+ 
