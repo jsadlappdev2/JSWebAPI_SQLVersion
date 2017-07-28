@@ -31,44 +31,59 @@ namespace JSWebAPI_SQLVersion.Controllers
             //check exist or not 
             int count = 0;
             count = checkexistbyusername(user.username);
+            int email_count = 0;
+            email_count = checkexistbyemail(user.email);
+
             if (count.ToString() == "0")
             {
 
-                MySqlConnection myConnection = new MySqlConnection();
-                myConnection.ConnectionString = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
-
-                MySqlCommand sqlCmd = new MySqlCommand();
-                sqlCmd.CommandType = CommandType.Text;
-                sqlCmd.CommandText = "INSERT INTO users (username,email,password,create_date,valid_flag) Values (@username,@email,@password,NOW(),1)";
-                sqlCmd.Connection = myConnection;
-
-
-                sqlCmd.Parameters.AddWithValue("@username", user.username);
-                sqlCmd.Parameters.AddWithValue("@email", user.email);
-                sqlCmd.Parameters.AddWithValue("@password", user.password);
-             
-
-                try
+                if (email_count.ToString() == "0")
                 {
-                    myConnection.Open();
-                    int rowInserted = sqlCmd.ExecuteNonQuery();
 
-                    return 2;
+                    MySqlConnection myConnection = new MySqlConnection();
+                    myConnection.ConnectionString = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
+
+                    MySqlCommand sqlCmd = new MySqlCommand();
+                    sqlCmd.CommandType = CommandType.Text;
+                    sqlCmd.CommandText = "INSERT INTO users (username,email,password,create_date,valid_flag) Values (@username,@email,@password,NOW(),1)";
+                    sqlCmd.Connection = myConnection;
+
+
+                    sqlCmd.Parameters.AddWithValue("@username", user.username);
+                    sqlCmd.Parameters.AddWithValue("@email", user.email);
+                    sqlCmd.Parameters.AddWithValue("@password", user.password);
+
+
+                    try
+                    {
+                        myConnection.Open();
+                        int rowInserted = sqlCmd.ExecuteNonQuery();
+                        //create success
+                        return 2;
+                    }
+                    catch (Exception)
+                    {
+                      //create failed.
+                        return 3;
+
+                    }
+                    finally
+                    {
+                        myConnection.Close();
+                    }
                 }
-                catch (Exception)
-                {
 
-                    return 3;
+                else
+                { 
+                    //email has exited
+                    return 4;
 
-                }
-                finally
-                {
-                    myConnection.Close();
                 }
             }
             else
             {
 
+                //username has exited
                 return 1;
 
 
@@ -218,6 +233,22 @@ namespace JSWebAPI_SQLVersion.Controllers
         {
 
             string sql = "Select *  from users where userid=" + id + "  and valid_flag=1 ";
+            string connStr = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
+            MySqlConnection connsql = new MySqlConnection(connStr);
+            if (connsql.State.ToString() == "Closed") connsql.Open();
+            MySqlCommand Cmd = new MySqlCommand(sql, connsql);
+            DataTable dt = new DataTable();
+            MySqlDataAdapter sda = new MySqlDataAdapter();
+            sda.SelectCommand = Cmd;
+            sda.Fill(dt);
+            return dt.Rows.Count;
+        }
+
+
+        public int checkexistbyemail(string email)
+        {
+
+            string sql = "Select *  from users where email='" + email + "' and valid_flag=1  ";
             string connStr = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
             MySqlConnection connsql = new MySqlConnection(connStr);
             if (connsql.State.ToString() == "Closed") connsql.Open();
