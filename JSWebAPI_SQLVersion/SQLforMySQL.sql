@@ -40,10 +40,12 @@ select * from users where valid_flag=1 and username ='jerryshen'
 select concat( concat(concat('Hi ',' ', username),'! Your password is: ',password),'. Please try again!',' (Admin)') from users
 
 --new todoitem with userid
+
+drop table NewTodoItem
  
 CREATE TABLE NewTodoItem(
    id INT AUTO_INCREMENT PRIMARY KEY,
-   userid int,
+   username varchar(100),
    Description VARCHAR(500),
    DueDate VARCHAR(255),
     isDone TINYINT(1)

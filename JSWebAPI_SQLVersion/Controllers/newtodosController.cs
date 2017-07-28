@@ -34,46 +34,58 @@ namespace JSWebAPI_SQLVersion.Controllers
 
             //check exist or not 
             int count = 0;
-            count = checkexistbyDescription(todo.userid,todo.Description);
-            if (count.ToString() == "0")
+            count = checkexistbyDescription(todo.username,todo.Description);
+            int userexit = 0;
+            userexit = checkusername(todo.username);
+            if (userexit > 0)
             {
-
-                MySqlConnection myConnection = new MySqlConnection();
-                myConnection.ConnectionString = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
-
-                MySqlCommand sqlCmd = new MySqlCommand();
-                sqlCmd.CommandType = CommandType.Text;
-                sqlCmd.CommandText = "INSERT INTO NewTodoItem (userid,Description,DueDate,isDone) Values (@userid,@Description,@DueDate,@isDone)";
-                sqlCmd.Connection = myConnection;
-
-                sqlCmd.Parameters.AddWithValue("@userid", todo.userid);
-                sqlCmd.Parameters.AddWithValue("@Description", todo.Description);
-                sqlCmd.Parameters.AddWithValue("@DueDate", todo.DueDate);
-                sqlCmd.Parameters.AddWithValue("@isDone", todo.isDone);
-
-                try
+                if (count.ToString() == "0")
                 {
-                    myConnection.Open();
-                    int rowInserted = sqlCmd.ExecuteNonQuery();
 
-                    return 2;
+                    MySqlConnection myConnection = new MySqlConnection();
+                    myConnection.ConnectionString = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
+
+                    MySqlCommand sqlCmd = new MySqlCommand();
+                    sqlCmd.CommandType = CommandType.Text;
+                    sqlCmd.CommandText = "INSERT INTO NewTodoItem (username,Description,DueDate,isDone) Values (@username,@Description,@DueDate,@isDone)";
+                    sqlCmd.Connection = myConnection;
+
+                    sqlCmd.Parameters.AddWithValue("@username", todo.username);
+                    sqlCmd.Parameters.AddWithValue("@Description", todo.Description);
+                    sqlCmd.Parameters.AddWithValue("@DueDate", todo.DueDate);
+                    sqlCmd.Parameters.AddWithValue("@isDone", todo.isDone);
+
+                    try
+                    {
+                        myConnection.Open();
+                        int rowInserted = sqlCmd.ExecuteNonQuery();
+
+                        return 2;
+                    }
+                    catch (Exception)
+                    {
+
+                        return 3;
+
+                    }
+                    finally
+                    {
+                        myConnection.Close();
+                    }
                 }
-                catch (Exception)
+                else
                 {
 
-                    return 3;
+                    return 1;
 
-                }
-                finally
-                {
-                    myConnection.Close();
+
+
                 }
             }
             else
             {
-
-                return 1;
-
+                //no existing username
+                return 4;
 
 
             }
@@ -102,7 +114,7 @@ namespace JSWebAPI_SQLVersion.Controllers
                 {
                     todo = new newtodos();
                     todo.id = (int)reader.GetValue(0);
-                    todo.userid = (int)reader.GetValue(1);
+                    todo.username =  reader.GetValue(1).ToString();
                     todo.Description = reader.GetValue(2).ToString();
                     todo.DueDate = reader.GetValue(3).ToString();
                     todo.isDone = (bool)reader.GetValue(4);
@@ -128,7 +140,7 @@ namespace JSWebAPI_SQLVersion.Controllers
         //Better way: can get JSON data in a good format.
         [HttpGet]
         [ActionName("QueryAll2")]
-        public List<todos> QueryAll2(int userid)
+        public List<todos> QueryAll2(string  username)
         {
 
 
@@ -136,7 +148,7 @@ namespace JSWebAPI_SQLVersion.Controllers
             string conString = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
             var con = new MySqlConnection(conString);
 
-            MySqlCommand cmd = new MySqlCommand(" select *  from NewTodoItem where userid="+userid+" order by  isdone,id asc ", con);
+            MySqlCommand cmd = new MySqlCommand(" select *  from NewTodoItem where username="+username+" order by  isdone,id asc ", con);
             cmd.CommandType = CommandType.Text;
             // Create a DataAdapter to run the command and fill the DataTable
             MySqlDataAdapter da = new MySqlDataAdapter();
@@ -226,6 +238,7 @@ namespace JSWebAPI_SQLVersion.Controllers
             //check exist or not 
             int count = 0;
             count = checkexistbyID(id);
+         
             if (count >= 1)
             {
                 MySqlConnection myConnection = new MySqlConnection();
@@ -269,10 +282,10 @@ namespace JSWebAPI_SQLVersion.Controllers
 
 
         //------------------------------------function to check records exist or not----------------------------------------------
-        public int checkexistbyDescription(int userid,string Description)
+        public int checkexistbyDescription(string username,string Description)
         {
 
-            string sql = "Select *  from NewTodoItem where userid="+userid+" and  Description='" + Description + "' ";
+            string sql = "Select *  from NewTodoItem where username='"+ username + "' and  Description='" + Description + "' ";
             string connStr = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
             MySqlConnection connsql = new MySqlConnection(connStr);
             if (connsql.State.ToString() == "Closed") connsql.Open();
@@ -300,6 +313,21 @@ namespace JSWebAPI_SQLVersion.Controllers
             return dt.Rows.Count;
         }
 
+
+        public int checkusername(string  username)
+        {
+
+            string sql = "Select *  from users where username='" + username + "' ";
+            string connStr = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
+            MySqlConnection connsql = new MySqlConnection(connStr);
+            if (connsql.State.ToString() == "Closed") connsql.Open();
+            MySqlCommand Cmd = new MySqlCommand(sql, connsql);
+            DataTable dt = new DataTable();
+            MySqlDataAdapter sda = new MySqlDataAdapter();
+            sda.SelectCommand = Cmd;
+            sda.Fill(dt);
+            return dt.Rows.Count;
+        }
 
 
     }
