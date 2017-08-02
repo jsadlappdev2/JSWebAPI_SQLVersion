@@ -23,18 +23,18 @@ namespace JSWebAPI_SQLVersion.Controllers
         //API: upload file to AWS S3
         [HttpPost]
         [ActionName("UploadFileToAWSS3")]
-        public string UploadFileToAWSS3([FromBody] filesinAWSS3 myfile)
+        public string UploadFileToAWSS3([FromBody] filesinAWSS3 myfile, string youraccesskey,string yoursecuritykey)
         {
 
 
             string uploadfeedback = "";
-            string file_saved_name = myfile.upload_person + "_" + myfile.file_orginal_name + "_" + DateTime.Now.ToString("yyyyMMddhhmmss");
+            string file_saved_name = myfile.upload_person + "_" + DateTime.Now.ToString("yyyyMMddhhmmss")+"_" + myfile.file_orginal_name;
             //upload file
             try
             {
                 string file_path = myfile.file_path + "\\" + myfile.file_orginal_name;
                 FileStream fileToUpload = new FileStream(file_path, FileMode.Open, FileAccess.Read);
-                uploadfeedback = sendMyFileToS3(fileToUpload, myfile.bucket_name, myfile.sub_folder, file_saved_name);
+                uploadfeedback = sendMyFileToS3(fileToUpload, myfile.bucket_name, myfile.sub_folder, file_saved_name,youraccesskey,yoursecuritykey);
                 if (uploadfeedback.Substring(0, 5) == "https") //success because of get the url for the file.
                 {
                     MySqlConnection myConnection = new MySqlConnection();
@@ -50,7 +50,9 @@ namespace JSWebAPI_SQLVersion.Controllers
                     sqlCmd.Parameters.AddWithValue("@file_orginal_name", myfile.file_orginal_name);
                     sqlCmd.Parameters.AddWithValue("@file_path", myfile.file_path);
                     sqlCmd.Parameters.AddWithValue("@file_saved_name", file_saved_name);
-                    sqlCmd.Parameters.AddWithValue("@flle_type", myfile.flle_type);
+                    //get file type from file_original_name
+                    string pos = myfile.file_orginal_name.Substring(myfile.file_orginal_name.IndexOf(".") + 1, myfile.file_orginal_name.Length - myfile.file_orginal_name.IndexOf("."));
+                    sqlCmd.Parameters.AddWithValue("@flle_type", pos);
                     sqlCmd.Parameters.AddWithValue("@file_url", uploadfeedback);
                     sqlCmd.Parameters.AddWithValue("@upload_person", myfile.upload_person);
 
@@ -93,7 +95,7 @@ namespace JSWebAPI_SQLVersion.Controllers
 
 
         //upload files to AWS S3 using stream
-        public string sendMyFileToS3(System.IO.Stream localFilePath, string bucketName, string subDirectoryInBucket, string fileNameInS3)
+        public string sendMyFileToS3(System.IO.Stream localFilePath, string bucketName, string subDirectoryInBucket, string fileNameInS3, string youraccesskey, string yoursecuritykey)
         {
             // input explained :
             // localFilePath = we will use a file stream , instead of path
@@ -109,7 +111,7 @@ namespace JSWebAPI_SQLVersion.Controllers
 
 
             // IAmazonS3 client = new AmazonS3Client("Your Access Key", "Your Secrete Key", Amazon.RegionEndpoint.USWest2);
-            IAmazonS3 client = new AmazonS3Client("AKIAJSJNUQCB7UEPLAFQ", "qWWpCUBNLo1ujl8We9Iz8gETklZxY2YmV5ImCDtT", Amazon.RegionEndpoint.APSoutheast2);
+            IAmazonS3 client = new AmazonS3Client(youraccesskey, yoursecuritykey, Amazon.RegionEndpoint.APSoutheast2);
 
             // create a TransferUtility instance passing it the IAmazonS3 created in the first step
             TransferUtility utility = new TransferUtility(client);
@@ -145,7 +147,7 @@ namespace JSWebAPI_SQLVersion.Controllers
         }
 
         //upload files to AWSS3 using filepath
-        public bool sendMyFileToS3byname(string localFilePath, string bucketName, string subDirectoryInBucket, string fileNameInS3)
+        public bool sendMyFileToS3byname(string localFilePath, string bucketName, string subDirectoryInBucket, string fileNameInS3, string youraccesskey, string yoursecuritykey)
         {
             // input explained :
             // localFilePath = we will use a file stream , instead of path
@@ -161,7 +163,7 @@ namespace JSWebAPI_SQLVersion.Controllers
 
 
             // IAmazonS3 client = new AmazonS3Client("Your Access Key", "Your Secrete Key", Amazon.RegionEndpoint.USWest2);
-            IAmazonS3 client = new AmazonS3Client("AKIAJSJNUQCB7UEPLAFQ", "qWWpCUBNLo1ujl8We9Iz8gETklZxY2YmV5ImCDtT", Amazon.RegionEndpoint.APSoutheast2);
+            IAmazonS3 client = new AmazonS3Client(youraccesskey, yoursecuritykey, Amazon.RegionEndpoint.APSoutheast2);
 
             // create a TransferUtility instance passing it the IAmazonS3 created in the first step
             TransferUtility utility = new TransferUtility(client);

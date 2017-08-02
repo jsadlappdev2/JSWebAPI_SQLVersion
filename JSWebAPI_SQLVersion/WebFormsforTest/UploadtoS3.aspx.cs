@@ -26,13 +26,13 @@ namespace JSWebAPI_SQLVersion.WebFormsforTest
            string     filePath= "C:\\Jerry Shen\\testfolder\\hill2.JPG";
            FileStream fileToUpload =    new FileStream(filePath, FileMode.Open, FileAccess.Read);
 
-            string  fileurl = sendMyFileToS3(fileToUpload, "awss3dailylifehelperapp", "images", "hill2.JPG");
+            string  fileurl = sendMyFileToS3(fileToUpload, "awss3dailylifehelperapp", "images", "hill2.JPG","youraccesskey", "yoursecuritykey");
             Label1.Text = fileurl;
         }
 
       
 
-        public string sendMyFileToS3(System.IO.Stream localFilePath, string bucketName, string subDirectoryInBucket, string fileNameInS3)
+        public string sendMyFileToS3(System.IO.Stream localFilePath, string bucketName, string subDirectoryInBucket, string fileNameInS3, string youraccesskey, string yoursecuritykey)
         {
             // input explained :
             // localFilePath = we will use a file stream , instead of path
@@ -48,7 +48,7 @@ namespace JSWebAPI_SQLVersion.WebFormsforTest
 
 
             // IAmazonS3 client = new AmazonS3Client("Your Access Key", "Your Secrete Key", Amazon.RegionEndpoint.USWest2);
-            IAmazonS3 client = new AmazonS3Client("AKIAJSJNUQCB7UEPLAFQ", "qWWpCUBNLo1ujl8We9Iz8gETklZxY2YmV5ImCDtT", Amazon.RegionEndpoint.APSoutheast2);
+            IAmazonS3 client = new AmazonS3Client(youraccesskey, yoursecuritykey, Amazon.RegionEndpoint.APSoutheast2);
 
             // create a TransferUtility instance passing it the IAmazonS3 created in the first step
             TransferUtility utility = new TransferUtility(client);
@@ -84,7 +84,7 @@ namespace JSWebAPI_SQLVersion.WebFormsforTest
         }
 
 
-        public bool sendMyFileToS3byname(string localFilePath, string bucketName, string subDirectoryInBucket, string fileNameInS3)
+        public bool sendMyFileToS3byname(string localFilePath, string bucketName, string subDirectoryInBucket, string fileNameInS3, string youraccesskey, string yoursecuritykey)
         {
             // input explained :
             // localFilePath = we will use a file stream , instead of path
@@ -100,7 +100,7 @@ namespace JSWebAPI_SQLVersion.WebFormsforTest
 
 
             // IAmazonS3 client = new AmazonS3Client("Your Access Key", "Your Secrete Key", Amazon.RegionEndpoint.USWest2);
-            IAmazonS3 client = new AmazonS3Client("AKIAJSJNUQCB7UEPLAFQ", "qWWpCUBNLo1ujl8We9Iz8gETklZxY2YmV5ImCDtT", Amazon.RegionEndpoint.APSoutheast2);
+            IAmazonS3 client = new AmazonS3Client(youraccesskey, yoursecuritykey, Amazon.RegionEndpoint.APSoutheast2);
 
             // create a TransferUtility instance passing it the IAmazonS3 created in the first step
             TransferUtility utility = new TransferUtility(client);
