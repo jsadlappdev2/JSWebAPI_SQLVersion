@@ -51,7 +51,7 @@ namespace JSWebAPI_SQLVersion.Controllers
                     sqlCmd.Parameters.AddWithValue("@file_path", myfile.file_path);
                     sqlCmd.Parameters.AddWithValue("@file_saved_name", file_saved_name);
                     //get file type from file_original_name
-                    string pos = myfile.file_orginal_name.Substring(myfile.file_orginal_name.IndexOf(".") + 1, myfile.file_orginal_name.Length - myfile.file_orginal_name.IndexOf("."));
+                    string pos = myfile.file_orginal_name.Substring(myfile.file_orginal_name.IndexOf(".") + 1, myfile.file_orginal_name.Length - myfile.file_orginal_name.IndexOf(".")-1);
                     sqlCmd.Parameters.AddWithValue("@flle_type", pos);
                     sqlCmd.Parameters.AddWithValue("@file_url", uploadfeedback);
                     sqlCmd.Parameters.AddWithValue("@upload_person", myfile.upload_person);
