@@ -228,10 +228,12 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\emailController.cs" />
+    <Compile Include="Controllers\filesinAWSS3Controller.cs" />
     <Compile Include="Controllers\newtodosController.cs" />
     <Compile Include="Controllers\usersController.cs" />
     <Compile Include="Models\email.cs" />
     <Compile Include="Models\emailaddress.cs" />
+    <Compile Include="Models\filesinAWSS3.cs" />
     <Compile Include="Models\newtodos.cs" />
     <Compile Include="Models\users.cs" />
     <Compile Include="WebFormsforTest\ConnecttoMySQLDEMO.aspx.cs">

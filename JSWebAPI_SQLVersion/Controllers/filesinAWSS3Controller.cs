@@ -1,37 +1,98 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
 using System.IO;
 using Amazon.S3;
 using Amazon.S3.Transfer;
+using JSWebAPI_SQLVersion.Models;
+using System.Data;
+using System.Configuration;
+using System.Data.OleDb;
+using System.Data.SqlClient;
+using Newtonsoft.Json;
+using MySql.Data.MySqlClient;
 
 
-namespace JSWebAPI_SQLVersion.WebFormsforTest
+namespace JSWebAPI_SQLVersion.Controllers
 {
-    public partial class UploadtoS3 : System.Web.UI.Page
+    public class filesinAWSS3Controller : ApiController
     {
-        protected void Page_Load(object sender, EventArgs e)
+        //API: upload file to AWS S3
+        [HttpPost]
+        [ActionName("UploadFileToAWSS3")]
+        public string UploadFileToAWSS3([FromBody] filesinAWSS3 myfile)
         {
+
+
+            string uploadfeedback = "";
+            string file_saved_name = myfile.upload_person + "_" + myfile.file_orginal_name + "_" + DateTime.Now.ToString("yyyyMMddhhmmss");
+            //upload file
+            try
+            {
+                string file_path = myfile.file_path + "\\" + myfile.file_orginal_name;
+                FileStream fileToUpload = new FileStream(file_path, FileMode.Open, FileAccess.Read);
+                uploadfeedback = sendMyFileToS3(fileToUpload, myfile.bucket_name, myfile.sub_folder, file_saved_name);
+                if (uploadfeedback.Substring(0, 5) == "https") //success because of get the url for the file.
+                {
+                    MySqlConnection myConnection = new MySqlConnection();
+                    myConnection.ConnectionString = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
+
+                    MySqlCommand sqlCmd = new MySqlCommand();
+                    sqlCmd.CommandType = CommandType.Text;
+                    sqlCmd.CommandText = "INSERT INTO file_on_awss3 (bucket_name,sub_folder,file_orginal_name,file_path,file_saved_name,flle_type,file_url,upload_person,upload_date) Values (@bucket_name,@sub_folder,@file_orginal_name,@file_path,@file_saved_name,@flle_type,@file_url,@upload_person,NOW())";
+                    sqlCmd.Connection = myConnection;
+
+                    sqlCmd.Parameters.AddWithValue("@bucket_name", myfile.bucket_name);
+                    sqlCmd.Parameters.AddWithValue("@sub_folder", myfile.sub_folder);
+                    sqlCmd.Parameters.AddWithValue("@file_orginal_name", myfile.file_orginal_name);
+                    sqlCmd.Parameters.AddWithValue("@file_path", myfile.file_path);
+                    sqlCmd.Parameters.AddWithValue("@file_saved_name", file_saved_name);
+                    sqlCmd.Parameters.AddWithValue("@flle_type", myfile.flle_type);
+                    sqlCmd.Parameters.AddWithValue("@file_url", uploadfeedback);
+                    sqlCmd.Parameters.AddWithValue("@upload_person", myfile.upload_person);
+
+
+
+
+                    try
+                    {
+                        myConnection.Open();
+                        int rowInserted = sqlCmd.ExecuteNonQuery();
+                        return uploadfeedback;
+                    }
+                    catch
+                    {
+
+                        //get password and send email success but insert history failed.
+                        return uploadfeedback;
+
+                    }
+                    finally
+                    {
+                        myConnection.Close();
+                    }
+
+                }
+                else
+                {
+
+                    return "Failed: " + uploadfeedback;
+                }
+            }
+            catch (Exception e)
+            {
+                return "Failed: " + e.Message.ToString();
+
+            }
+
 
         }
 
-        protected void Button1_Click(object sender, EventArgs e)
-        {
 
-           //  string localFilePath = "C:\\Jerry Shen\\testfolder\\hill.JPG";
-           //  FileStream fs = File.OpenRead(localFilePath);
-           string     filePath= "C:\\Jerry Shen\\testfolder\\hill2.JPG";
-           FileStream fileToUpload =    new FileStream(filePath, FileMode.Open, FileAccess.Read);
-
-            string  fileurl = sendMyFileToS3(fileToUpload, "awss3dailylifehelperapp", "images", "hill2.JPG");
-            Label1.Text = fileurl;
-        }
-
-      
-
+        //upload files to AWS S3 using stream
         public string sendMyFileToS3(System.IO.Stream localFilePath, string bucketName, string subDirectoryInBucket, string fileNameInS3)
         {
             // input explained :
@@ -71,19 +132,19 @@ namespace JSWebAPI_SQLVersion.WebFormsforTest
             {
                 utility.Upload(request); //commensing the transfer                                        
                 //get url
-                string imageurl = "https://s3-ap-southeast-2.amazonaws.com/awss3dailylifehelperapp/images/" + fileNameInS3;
+                string imageurl = "https://s3-ap-southeast-2.amazonaws.com/"+bucketName+"/"+subDirectoryInBucket+"/" + fileNameInS3;
                 return imageurl;
             }
-            catch(Exception err)
+            catch (Exception err)
             {
-                string imageurl= "Upload failed and Error is: " + err.Message.ToString();
-                return imageurl; 
+                string imageurl = "Upload failed and Error is: " + err.Message.ToString();
+                return imageurl;
 
             }
 
         }
 
-
+        //upload files to AWSS3 using filepath
         public bool sendMyFileToS3byname(string localFilePath, string bucketName, string subDirectoryInBucket, string fileNameInS3)
         {
             // input explained :
@@ -118,20 +179,23 @@ namespace JSWebAPI_SQLVersion.WebFormsforTest
             request.FilePath = localFilePath;
             request.Key = fileNameInS3; //file name up in S3
                                         //request.FilePath = localFilePath; //local file name
-          //  request.InputStream = localFilePath;
+                                        //  request.InputStream = localFilePath;
             request.CannedACL = S3CannedACL.PublicReadWrite;
             try
             {
                 utility.Upload(request); //commensing the transfer
                 return true; //indicate that the file was sent
             }
-            catch (Exception err)
+            catch (Exception)
             {
-                Label2.Text = "Error: " + err.Message.ToString();
+                //Label2.Text = "Error: " + err.Message.ToString();
                 return false; //indicate that the file was sent
 
             }
 
         }
     }
+
+
+
 }

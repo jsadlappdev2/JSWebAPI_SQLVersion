@@ -76,5 +76,27 @@ CREATE TABLE NewTodoItem(
        OR DESCRIPTION LIKE '%Japanese%'
        OR DESCRIPTION LIKE '%Korean%'
        ORDER BY CHARACTER_SET_NAME;
+       
+       
+       
+-------------table to store files in amazon s3 bucket
+drop table file_on_awss3
+ create table file_on_awss3
+ (
+ id INT AUTO_INCREMENT PRIMARY KEY,
+ bucket_name varchar(100),
+ sub_folder varchar(100),
+ file_orginal_name varchar(100),
+ file_path varchar(200),
+ file_saved_name varchar(200),
+ flle_type varchar(20),
+ file_url varchar(200),
+ upload_person varchar(100),
+ upload_date datetime
+
+ )
+ 
+ select * from file_on_awss3
+       
 
  
