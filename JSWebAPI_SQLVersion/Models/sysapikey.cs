@@ -9,8 +9,8 @@ namespace JSWebAPI_SQLVersion.Models
     {
 
         public int id { get; set; }
+        public string app_name { get; set; }
         public string apikey_provider { get; set; }
-
         public string apikey_name { get; set; }
         public string apikey_value1 { get; set; }
         public string apikey_value2 { get; set; }

@@ -19,7 +19,7 @@ namespace JSWebAPI_SQLVersion.Controllers
         //-----------------------------------QueryGetAPIKeys By Name-----------------------------------------------------------------------------
         [HttpGet]
         [ActionName("GetSysAPIKeyByName")]
-        public List<sysapikey> GetSysAPIKeyByName(string provider, string keyname, string securitycode)
+        public List<sysapikey> GetSysAPIKeyByName(string appname,string provider, string keyname, string securitycode)
         {
 
             if (securitycode == "jsadlappdev")
@@ -28,7 +28,7 @@ namespace JSWebAPI_SQLVersion.Controllers
                 string conString = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
                 var con = new MySqlConnection(conString);
 
-                MySqlCommand cmd = new MySqlCommand(" select id,apikey_provider,apikey_name,apikey_value1,apikey_value2,endpoint_1,endpoint_2,ref_url,is_free,apply_email,apply_password,apply_info,apply_date,expire_date,valid_flag  from sys_public_api_keys where apikey_provider ='" + provider + "' and apikey_name='" + keyname + "' and valid_flag='Y' ", con);
+                MySqlCommand cmd = new MySqlCommand(" select id,app_name,apikey_provider,apikey_name,apikey_value1,apikey_value2,endpoint_1,endpoint_2,ref_url,is_free,apply_email,apply_password,apply_info,apply_date,expire_date,valid_flag  from sys_public_api_keys where app_name ='" + appname + "' and apikey_provider ='" + provider + "' and apikey_name='" + keyname + "' and valid_flag='Y' ", con);
                 cmd.CommandType = CommandType.Text;
                 // Create a DataAdapter to run the command and fill the DataTable
                 MySqlDataAdapter da = new MySqlDataAdapter();
@@ -41,6 +41,7 @@ namespace JSWebAPI_SQLVersion.Controllers
                     allkeys.Add(new sysapikey()
                     {
                         id = (int)row["id"],
+                        app_name = row["app_name"].ToString(),
                         apikey_provider = row["apikey_provider"].ToString(),
                         apikey_name = row["apikey_name"].ToString(),
                         apikey_value1 = row["apikey_value1"].ToString(),
@@ -52,8 +53,8 @@ namespace JSWebAPI_SQLVersion.Controllers
                         apply_email = row["apply_email"].ToString(),
                         apply_password = row["apply_password"].ToString(),
                         apply_info = row["apply_info"].ToString(),
-                        //   create_date = (DateTime)row["create_date"],
-                        //  unvalid_date= (DateTime)row["unvalid_date"],
+                        apply_date = (DateTime)row["apply_date"],
+                        expire_date= (DateTime)row["expire_date"],
                         valid_flag = row["valid_flag"].ToString()
                     });
                 }
@@ -91,7 +92,7 @@ namespace JSWebAPI_SQLVersion.Controllers
                 string conString = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
                 var con = new MySqlConnection(conString);
 
-                MySqlCommand cmd = new MySqlCommand(" select id,apikey_provider,apikey_name,apikey_value1,apikey_value2,endpoint_1,endpoint_2,ref_url,is_free,apply_email,apply_password,apply_info,apply_date,expire_date,valid_flag  from sys_public_api_keys where valid_flag='Y'  order by apikey_provider, apikey_name, id ", con);
+                MySqlCommand cmd = new MySqlCommand(" select id,app_name,apikey_provider,apikey_name,apikey_value1,apikey_value2,endpoint_1,endpoint_2,ref_url,is_free,apply_email,apply_password,apply_info,apply_date,expire_date,valid_flag  from sys_public_api_keys  order by apikey_provider, apikey_name, id ", con);
                 cmd.CommandType = CommandType.Text;
                 // Create a DataAdapter to run the command and fill the DataTable
                 MySqlDataAdapter da = new MySqlDataAdapter();
@@ -104,6 +105,7 @@ namespace JSWebAPI_SQLVersion.Controllers
                     allkeys.Add(new sysapikey()
                     {
                         id = (int)row["id"],
+                        app_name = row["app_name"].ToString(),
                         apikey_provider = row["apikey_provider"].ToString(),
                         apikey_name = row["apikey_name"].ToString(),
                         apikey_value1 = row["apikey_value1"].ToString(),
@@ -115,8 +117,8 @@ namespace JSWebAPI_SQLVersion.Controllers
                         apply_email = row["apply_email"].ToString(),
                         apply_password = row["apply_password"].ToString(),
                         apply_info = row["apply_info"].ToString(),
-                        //   create_date = (DateTime)row["create_date"],
-                        //  unvalid_date= (DateTime)row["unvalid_date"],
+                        apply_date = (DateTime)row["apply_date"],
+                        expire_date = (DateTime)row["expire_date"],
                         valid_flag = row["valid_flag"].ToString()
                     });
                 }
@@ -139,6 +141,140 @@ namespace JSWebAPI_SQLVersion.Controllers
                 return null;
             }
         }
+
+
+
+        //---------------------------------------------------------Insert new api keys---------------------------------------------
+        [HttpPost]
+        [ActionName("AddNewAPIKey")]
+        public int AddNewAPIKey([FromBody] sysapikey newapi)
+        {
+
+           
+
+                    MySqlConnection myConnection = new MySqlConnection();
+                    myConnection.ConnectionString = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
+
+                    MySqlCommand sqlCmd = new MySqlCommand();
+                    sqlCmd.CommandType = CommandType.Text;
+                    sqlCmd.CommandText = "INSERT INTO sys_public_api_keys (app_name,apikey_provider,apikey_name,apikey_value1,apikey_value2,endpoint_1,endpoint_2,ref_url,is_free,apply_email,apply_password,apply_info,apply_date,expire_date,valid_flag) Values (@app_name,@apikey_provider,@apikey_name,@apikey_value1,@apikey_value2,@endpoint_1,@endpoint_2,@ref_url,@is_free,@apply_email,@apply_password,@apply_info,(CURDATE()),@expire_date,'Y')";
+                    sqlCmd.Connection = myConnection;
+
+                    sqlCmd.Parameters.AddWithValue("@app_name", newapi.app_name);
+            sqlCmd.Parameters.AddWithValue("@apikey_provider", newapi.apikey_provider);
+            sqlCmd.Parameters.AddWithValue("@apikey_name", newapi.apikey_name);
+            sqlCmd.Parameters.AddWithValue("@apikey_value1", newapi.apikey_value1);
+            sqlCmd.Parameters.AddWithValue("@apikey_value2", newapi.apikey_value2);
+            sqlCmd.Parameters.AddWithValue("@endpoint_1", newapi.endpoint_1);
+            sqlCmd.Parameters.AddWithValue("@endpoint_2", newapi.endpoint_2);
+            sqlCmd.Parameters.AddWithValue("@ref_url", newapi.ref_url);
+            sqlCmd.Parameters.AddWithValue("@is_free", newapi.is_free);
+            sqlCmd.Parameters.AddWithValue("@apply_email", newapi.apply_email);
+            sqlCmd.Parameters.AddWithValue("@apply_password", newapi.apply_password);
+            sqlCmd.Parameters.AddWithValue("@apply_info", newapi.apply_info);
+            sqlCmd.Parameters.AddWithValue("@expire_date", newapi.expire_date);
+
+
+
+
+            try
+                    {
+                        myConnection.Open();
+                        int rowInserted = sqlCmd.ExecuteNonQuery();
+
+                        return 1;
+                    }
+                    catch (Exception)
+                    {
+
+                        return 2;
+
+                    }
+                    finally
+                    {
+                        myConnection.Close();
+                    }
+             
+        }
+
+
+
+        //------------------------------------------delete  operation using SQL -----------------------------------------------------------------------------
+        [HttpDelete]
+        [ActionName("DeleteByID")]
+        public int DeleteByID(int id)
+        {
+
+
+            
+
+                MySqlConnection myConnection = new MySqlConnection();
+                myConnection.ConnectionString = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
+
+                MySqlCommand sqlCmd = new MySqlCommand();
+                sqlCmd.CommandType = CommandType.Text;
+                sqlCmd.CommandText = "delete from sys_public_api_keys where id=" + id + "";
+                sqlCmd.Connection = myConnection;
+                myConnection.Open();
+                try
+                {
+                    int rowDeleted = sqlCmd.ExecuteNonQuery();
+
+                    return 1;
+
+                }
+                catch
+                {
+                    return 2;
+
+                }
+                finally
+                {
+                    myConnection.Close();
+                }
+          
+
+        }
+
+
+        //---------------------------------------------update operation using SQL-----------------------------------------------------------------------
+        [HttpPut]
+        [ActionName("UpdateValidFlag")]
+        public int UpdateValidFlag(int id)
+        {
+
+            
+                MySqlConnection myConnection = new MySqlConnection();
+                myConnection.ConnectionString = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
+                MySqlCommand sqlCmd = new MySqlCommand();
+                sqlCmd.CommandType = CommandType.Text;
+                sqlCmd.CommandText = "update  sys_public_api_keys set valid_flag='N' where  id=" + id + "";
+                sqlCmd.Connection = myConnection;
+
+            
+
+                myConnection.Open();
+                try
+                {
+                    int rowInserted = sqlCmd.ExecuteNonQuery();
+                    return 1;
+                }
+                catch (Exception)
+                {
+                    return 2;
+
+                }
+                finally
+                {
+                    myConnection.Close();
+                }
+
+          
+
+
+        }
+
+
 
     }
 }

@@ -5,6 +5,7 @@
 drop table sys_public_api_keys
 CREATE TABLE sys_public_api_keys(
    id INT AUTO_INCREMENT PRIMARY KEY,
+   app_name varchar(100),
    apikey_provider VARCHAR(100),
    apikey_name VARCHAR(100),
    apikey_value1 VARCHAR(100),
@@ -21,8 +22,10 @@ CREATE TABLE sys_public_api_keys(
    valid_flag varchar(10)
 );
 
-insert into sys_public_api_keys(apikey_provider,apikey_name,apikey_value1,apikey_value2,endpoint_1,endpoint_2,ref_url,is_free,apply_email,apply_password,apply_info,apply_date,expire_date,valid_flag)
-values('MS_Azure',
+insert into sys_public_api_keys(app_name,apikey_provider,apikey_name,apikey_value1,apikey_value2,endpoint_1,endpoint_2,ref_url,is_free,apply_email,apply_password,apply_info,apply_date,expire_date,valid_flag)
+values(
+'DailyLifeHelper',
+'MS_Azure',
 'Computer_Vision_API',
 'c514e88fbb2a47f382ae9c62581b2cd9',
 'dabf4e6831934613a1999f6af7de79e1',
@@ -33,7 +36,7 @@ null,
 'jerryshenhz@gmail.com',
 null,
 null,
-(CURDATE()),
+,
 (CURDATE()+INTERVAL 30 DAY),
 'Y')
 
