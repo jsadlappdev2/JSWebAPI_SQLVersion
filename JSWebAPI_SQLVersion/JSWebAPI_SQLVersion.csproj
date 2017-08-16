@@ -227,17 +227,26 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\ying_emailController.cs" />
     <Compile Include="Controllers\emailController.cs" />
     <Compile Include="Controllers\filesinAWSS3Controller.cs" />
     <Compile Include="Controllers\newtodosController.cs" />
     <Compile Include="Controllers\sysapikeyController.cs" />
+    <Compile Include="Controllers\ying_urlsController.cs" />
+    <Compile Include="Controllers\ying_usersController.cs" />
+    <Compile Include="Controllers\ying_logsController .cs" />
     <Compile Include="Controllers\usersController.cs" />
+    <Compile Include="Models\ying_emailaddress.cs" />
+    <Compile Include="Models\ying_email.cs" />
     <Compile Include="Models\email.cs" />
     <Compile Include="Models\emailaddress.cs" />
     <Compile Include="Models\filesinAWSS3.cs" />
     <Compile Include="Models\newtodos.cs" />
     <Compile Include="Models\sysapikey.cs" />
     <Compile Include="Models\users.cs" />
+    <Compile Include="Models\ying_urls.cs" />
+    <Compile Include="Models\ying_logs.cs" />
+    <Compile Include="Models\ying_users.cs" />
     <Compile Include="WebFormsforTest\ConnecttoMySQLDEMO.aspx.cs">
       <DependentUpon>ConnecttoMySQLDEMO.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -284,6 +293,7 @@
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\jshen.jpg" />
+    <Content Include="MySQLSQLScripts\APIs_Ying.sql" />
     <Content Include="MySQLSQLScripts\App_Server_Management.sql" />
     <Content Include="WebFormsforTest\ConnecttoMySQLDEMO.aspx" />
     <Content Include="Content\bootstrap.css" />
