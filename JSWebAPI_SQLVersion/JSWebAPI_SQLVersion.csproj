@@ -247,11 +247,11 @@
     <Compile Include="Models\ying_urls.cs" />
     <Compile Include="Models\ying_logs.cs" />
     <Compile Include="Models\ying_users.cs" />
-    <Compile Include="WebFormsforTest\ConnecttoMySQLDEMO.aspx.cs">
+    <Compile Include="WebForms\TestingFunction\ConnecttoMySQLDEMO.aspx.cs">
       <DependentUpon>ConnecttoMySQLDEMO.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WebFormsforTest\ConnecttoMySQLDEMO.aspx.designer.cs">
+    <Compile Include="WebForms\TestingFunction\ConnecttoMySQLDEMO.aspx.designer.cs">
       <DependentUpon>ConnecttoMySQLDEMO.aspx</DependentUpon>
     </Compile>
     <Compile Include="Controllers\AccountController.cs" />
@@ -274,20 +274,48 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
-    <Compile Include="WebFormsforTest\SendEmail.aspx.cs">
+    <Compile Include="WebForms\DailyLifeHelper\dlh_login.aspx.cs">
+      <DependentUpon>dlh_login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebForms\DailyLifeHelper\dlh_login.aspx.designer.cs">
+      <DependentUpon>dlh_login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebForms\TestingFunction\SendEmail.aspx.cs">
       <DependentUpon>SendEmail.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WebFormsforTest\SendEmail.aspx.designer.cs">
+    <Compile Include="WebForms\TestingFunction\SendEmail.aspx.designer.cs">
       <DependentUpon>SendEmail.aspx</DependentUpon>
     </Compile>
     <Compile Include="Startup.cs" />
-    <Compile Include="WebFormsforTest\UploadtoS3.aspx.cs">
+    <Compile Include="WebForms\TestingFunction\UploadtoS3.aspx.cs">
       <DependentUpon>UploadtoS3.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="WebFormsforTest\UploadtoS3.aspx.designer.cs">
+    <Compile Include="WebForms\TestingFunction\UploadtoS3.aspx.designer.cs">
       <DependentUpon>UploadtoS3.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebForms\Ying\URLs.aspx.cs">
+      <DependentUpon>URLs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebForms\Ying\URLs.aspx.designer.cs">
+      <DependentUpon>URLs.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebForms\Ying\ying_longin.aspx.cs">
+      <DependentUpon>ying_longin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebForms\Ying\ying_longin.aspx.designer.cs">
+      <DependentUpon>ying_longin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebForms\Ying\ying_mainpage.aspx.cs">
+      <DependentUpon>ying_mainpage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebForms\Ying\ying_mainpage.aspx.designer.cs">
+      <DependentUpon>ying_mainpage.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -295,7 +323,7 @@
     <Content Include="Content\jshen.jpg" />
     <Content Include="MySQLSQLScripts\APIs_Ying.sql" />
     <Content Include="MySQLSQLScripts\App_Server_Management.sql" />
-    <Content Include="WebFormsforTest\ConnecttoMySQLDEMO.aspx" />
+    <Content Include="WebForms\TestingFunction\ConnecttoMySQLDEMO.aspx" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
@@ -322,7 +350,11 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
-    <Content Include="WebFormsforTest\UploadtoS3.aspx" />
+    <Content Include="WebForms\DailyLifeHelper\dlh_login.aspx" />
+    <Content Include="WebForms\TestingFunction\UploadtoS3.aspx" />
+    <Content Include="WebForms\Ying\URLs.aspx" />
+    <Content Include="WebForms\Ying\ying_longin.aspx" />
+    <Content Include="WebForms\Ying\ying_mainpage.aspx" />
     <None Include="Properties\PublishProfiles\JSWebAPISQLV - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\JSWebAPISQLV - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -336,7 +368,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="WebFormsforTest\SendEmail.aspx" />
+    <Content Include="WebForms\TestingFunction\SendEmail.aspx" />
     <Content Include="MySQLSQLScripts\APIs_DailyLifeHelper.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

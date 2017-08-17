@@ -57,6 +57,8 @@ select * from ying_logs
  valid_flag varchar(1)
  )  
  
+url
+ 
  
 
  

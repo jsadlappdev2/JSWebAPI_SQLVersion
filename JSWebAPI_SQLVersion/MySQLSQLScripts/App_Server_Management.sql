@@ -1,4 +1,20 @@
 ﻿-- this SQL Scripts are used to maintain SQLs for APP Server.
+--table to store sys admin password for asp.net API web Server
+drop table sys_users_apiwebserver
+CREATE TABLE sys_users_apiwebserver(
+   id INT AUTO_INCREMENT PRIMARY KEY,
+   app_name varchar(100),
+   admin_name varchar(50),
+   admin_password varchar(50),
+   create_date datetime,
+   expire_date datetime,
+   valid_flag varchar(10)
+);
+
+insert into sys_users_apiwebserver(app_name,admin_name,admin_password,create_date,valid_flag) values('Ying','admin','admin123',now(),'Y')
+
+select * from sys_users_apiwebserver
+
 
 
 -------------------------------manage Azure,Google,Amazon API keys------------------------------------------------------------------
