@@ -14,5 +14,7 @@ namespace JSWebAPI_SQLVersion.Models
         public DateTime entrytime { get; set; }
         public string valid_flag { get; set; }
 
+        public string icon { get; set; }
+
     }
 }

@@ -30,13 +30,14 @@ namespace JSWebAPI_SQLVersion.Controllers
 
                     MySqlCommand sqlCmd = new MySqlCommand();
                     sqlCmd.CommandType = CommandType.Text;
-                    sqlCmd.CommandText = "INSERT INTO ying_urls (type,url,description,entrytime,valid_flag) Values (@type,@url,@description,NOW(),'Y')";
+                    sqlCmd.CommandText = "INSERT INTO ying_urls (type,url,description,entrytime,valid_flag, icon) Values (@type,@url,@description,NOW(),'Y',@icon)";
                     sqlCmd.Connection = myConnection;
 
 
                     sqlCmd.Parameters.AddWithValue("@type", url.type);
                     sqlCmd.Parameters.AddWithValue("@url", url.url);
                     sqlCmd.Parameters.AddWithValue("@description", url.description);
+                    sqlCmd.Parameters.AddWithValue("@icon", url.icon);
 
 
 
@@ -73,7 +74,7 @@ namespace JSWebAPI_SQLVersion.Controllers
             string conString = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
             var con = new MySqlConnection(conString);
 
-            MySqlCommand cmd = new MySqlCommand(" select id,type,url, description ,valid_flag, entrytime from ying_urls where valid_flag='Y' order by  type,id desc ", con);
+            MySqlCommand cmd = new MySqlCommand(" select id,type,url, description ,valid_flag, entrytime , icon from ying_urls where valid_flag='Y' order by  type,id desc ", con);
             cmd.CommandType = CommandType.Text;
             // Create a DataAdapter to run the command and fill the DataTable
             MySqlDataAdapter da = new MySqlDataAdapter();
@@ -90,7 +91,61 @@ namespace JSWebAPI_SQLVersion.Controllers
                     url = row["url"].ToString(),
                     description = row["description"].ToString(),
                     valid_flag = row["valid_flag"].ToString(),
-                    entrytime = (DateTime)row["entrytime"]
+                    entrytime = (DateTime)row["entrytime"],
+                    icon = row["icon"].ToString()
+
+                });
+            }
+
+            if (alltodo == null)
+            {
+                return null;
+
+            }
+            else
+            {
+                return alltodo;
+            }
+
+
+        }
+
+
+
+
+        //----------------------------------- Query by description using SQL-----------------------------------------------------------------------------
+        //Better way: can get JSON data in a good format.
+        [HttpGet]
+        [ActionName("Querybydesc")]
+        public List<ying_urls> Querybydesc(string desc)
+        {
+
+
+
+            string conString = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
+            var con = new MySqlConnection(conString);
+
+            string newdesc = "%" + desc + "%";
+
+            MySqlCommand cmd = new MySqlCommand(" select id,type,url, description ,valid_flag, entrytime , icon from ying_urls where valid_flag='Y' and description like '"+newdesc+"' order by  type,id desc ", con);
+            cmd.CommandType = CommandType.Text;
+            // Create a DataAdapter to run the command and fill the DataTable
+            MySqlDataAdapter da = new MySqlDataAdapter();
+            da.SelectCommand = cmd;
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            List<ying_urls> alltodo = new List<ying_urls>();
+            foreach (DataRow row in dt.Rows)
+            {
+                alltodo.Add(new ying_urls()
+                {
+                    id = (int)row["id"],
+                    type = row["type"].ToString(),
+                    url = row["url"].ToString(),
+                    description = row["description"].ToString(),
+                    valid_flag = row["valid_flag"].ToString(),
+                    entrytime = (DateTime)row["entrytime"],
+                    icon = row["icon"].ToString()
 
                 });
             }

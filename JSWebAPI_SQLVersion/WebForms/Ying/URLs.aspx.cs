@@ -32,7 +32,7 @@ namespace JSWebAPI_SQLVersion.WebForms.Ying
 
             MySqlCommand sqlCmd = new MySqlCommand();
             sqlCmd.CommandType = CommandType.Text;
-            sqlCmd.CommandText = "INSERT INTO ying_urls (type,url,description,entrytime,valid_flag) Values (@type,@url,@description,NOW(),'Y')";
+            sqlCmd.CommandText = "INSERT INTO ying_urls (type,url,description,entrytime,valid_flag, icon) Values (@type,@url,@description,NOW(),'Y',@icon)";
             sqlCmd.Connection = myConnection;
 
 
@@ -40,25 +40,36 @@ namespace JSWebAPI_SQLVersion.WebForms.Ying
             sqlCmd.Parameters.AddWithValue("@url", url.Text);
             sqlCmd.Parameters.AddWithValue("@description", description.Text);
 
+            string icon = "";
+            if (type.SelectedItem.Text == "web")
+                icon = "ic_web.png";
+            else
+                if (type.SelectedItem.Text == "audio")
+                icon = "ic_volume_up.png";
+            else
+                icon = "ic_play_circle_outline.png";
+
+            sqlCmd.Parameters.AddWithValue("@icon", icon);
+
 
             try
-            {
-                myConnection.Open();
-                int rowInserted = sqlCmd.ExecuteNonQuery();
-                //create success
-                msge.Text = "Add new url successfully!";
-                GridViewBind();
-            }
-            catch (Exception ee)
-            {
-                //create failed.
-                msge.Text = "Add new url failed and error is: " + ee.Message.ToString();
+                {
+                    myConnection.Open();
+                    int rowInserted = sqlCmd.ExecuteNonQuery();
+                    //create success
+                    msge.Text = "Add new url successfully!";
+                    GridViewBind();
+                }
+                catch (Exception ee)
+                {
+                    //create failed.
+                    msge.Text = "Add new url failed and error is: " + ee.Message.ToString();
 
-            }
-            finally
-            {
-                myConnection.Close();
-            }
+                }
+                finally
+                {
+                    myConnection.Close();
+                }
 
         }
 

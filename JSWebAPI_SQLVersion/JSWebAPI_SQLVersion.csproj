@@ -247,6 +247,13 @@
     <Compile Include="Models\ying_urls.cs" />
     <Compile Include="Models\ying_logs.cs" />
     <Compile Include="Models\ying_users.cs" />
+    <Compile Include="WebForms\TestingFunction\chinesestroke.aspx.cs">
+      <DependentUpon>chinesestroke.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebForms\TestingFunction\chinesestroke.aspx.designer.cs">
+      <DependentUpon>chinesestroke.aspx</DependentUpon>
+    </Compile>
     <Compile Include="WebForms\TestingFunction\ConnecttoMySQLDEMO.aspx.cs">
       <DependentUpon>ConnecttoMySQLDEMO.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -289,6 +296,13 @@
       <DependentUpon>SendEmail.aspx</DependentUpon>
     </Compile>
     <Compile Include="Startup.cs" />
+    <Compile Include="WebForms\TestingFunction\test2.aspx.cs">
+      <DependentUpon>test2.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebForms\TestingFunction\test2.aspx.designer.cs">
+      <DependentUpon>test2.aspx</DependentUpon>
+    </Compile>
     <Compile Include="WebForms\TestingFunction\UploadtoS3.aspx.cs">
       <DependentUpon>UploadtoS3.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -323,6 +337,7 @@
     <Content Include="Content\jshen.jpg" />
     <Content Include="MySQLSQLScripts\APIs_Ying.sql" />
     <Content Include="MySQLSQLScripts\App_Server_Management.sql" />
+    <Content Include="WebForms\TestingFunction\chinesestroke.aspx" />
     <Content Include="WebForms\TestingFunction\ConnecttoMySQLDEMO.aspx" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
@@ -351,6 +366,7 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="WebForms\DailyLifeHelper\dlh_login.aspx" />
+    <Content Include="WebForms\TestingFunction\test2.aspx" />
     <Content Include="WebForms\TestingFunction\UploadtoS3.aspx" />
     <Content Include="WebForms\Ying\URLs.aspx" />
     <Content Include="WebForms\Ying\ying_longin.aspx" />

@@ -54,7 +54,8 @@ select * from ying_logs
  url varchar(1000),
  description varchar(1000),
  entrytime datetime,
- valid_flag varchar(1)
+ valid_flag varchar(1),
+ icon varchar(50)
  )  
  
 url

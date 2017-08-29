@@ -25,7 +25,6 @@
             <asp:ListItem>web</asp:ListItem>
             <asp:ListItem>audio</asp:ListItem>
             <asp:ListItem>video</asp:ListItem>
-            <asp:ListItem>other</asp:ListItem>
         </asp:DropDownList>
         <br />
         <br />
