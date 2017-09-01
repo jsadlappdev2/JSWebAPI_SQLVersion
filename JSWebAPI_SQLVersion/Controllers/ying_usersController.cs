@@ -21,7 +21,7 @@ namespace JSWebAPI_SQLVersion.Controllers
         //---------------------------------------------------------Insert operation using SQL---------------------------------------------
         [HttpPost]
         [ActionName("Addlog")]
-        public int Addlog([FromBody] ying_logs log)
+        public int Addlog(string username, string modulename)
         {
 
            
@@ -34,8 +34,8 @@ namespace JSWebAPI_SQLVersion.Controllers
                     sqlCmd.Connection = myConnection;
 
 
-                    sqlCmd.Parameters.AddWithValue("@username", log.username);
-                    sqlCmd.Parameters.AddWithValue("@modulename", log.modulename);
+                    sqlCmd.Parameters.AddWithValue("@username", username);
+                    sqlCmd.Parameters.AddWithValue("@modulename", modulename);
    
 
 
@@ -57,6 +57,42 @@ namespace JSWebAPI_SQLVersion.Controllers
                 myConnection.Close();
             }
               
+        }
+
+        //-----------------------------------queryuserapicounts-----------------------------------------------------------------------------
+        [HttpGet]
+        [ActionName("QueryAPIUsagebyUsername")]
+        public int QueryAPIUsagebyUsername(string username)
+        {
+            try
+            {
+
+                string sql = "Select * from ying_logs where username='" + username + "' and  date(usestarttime)=date(CURDATE())  ";
+                string connStr = ConfigurationManager.ConnectionStrings["apidb"].ConnectionString;
+                MySqlConnection connsql = new MySqlConnection(connStr);
+                if (connsql.State.ToString() == "Closed") connsql.Open();
+                MySqlCommand Cmd = new MySqlCommand(sql, connsql);
+                DataTable dt = new DataTable();
+                MySqlDataAdapter sda = new MySqlDataAdapter();
+                sda.SelectCommand = Cmd;
+                sda.Fill(dt);
+                if (dt.Rows.Count >= 30)
+                {
+                    //use API more than 30 times for today
+                    return 1;
+                }
+                else
+                {
+                    //less than 30 and it's ok
+                    return 2;
+                }
+            }
+            catch (Exception)
+            {
+                //call API error.
+                return 3;
+
+            }
         }
 
 
